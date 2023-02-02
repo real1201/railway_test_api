@@ -19,6 +19,7 @@
     "password": "UbBXSqPAUBoK1dtnz28c",
     "database": "railway",
     "host": "containers-us-west-174.railway.app",
+    "port": "7605",
     "dialect": "mysql"
   }
 }
