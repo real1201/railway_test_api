@@ -2,7 +2,6 @@ const db = require("../models");
 const NotFound = require("../helpers/not-found");
 const AppError = require("../helpers/AppError");
 const {
-  signJWT,
   verifiedJWT,
   hashPass,
   sendTokenToCookie,
@@ -106,7 +105,7 @@ exports.UserLogin = async (req, res, next) => {
     // user.password = undefined;
     // const token = await signJWT(user.id);
     // return res.status(201).json({ success: true, token, data: user });
-    sendTokenToCookie(user, 200, res);
+    return sendTokenToCookie(user, 200, res);
   }
   if (errors) {
     return res.status(401).json({ success: false, errors });
