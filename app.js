@@ -1,7 +1,9 @@
 const express = require("express");
 const app = express();
+const cookieParser = require("cookie-parser");
 const AppError = require("./helpers/AppError");
 
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

@@ -115,16 +115,20 @@ exports.UserLogin = async (req, res, next) => {
 
 // Authentication Middleware
 exports.isLoggedIn = async (req, res, next) => {
-  let token;
+  let token, jwt;
   if (
     req.headers.authorization &&
-    req.headers.authorization.startsWith("Bearer")
+    req.headers.authorization.startsWith("Bearer" || req.cookies.jwt)
   ) {
     token = req.headers.authorization.split(" ")[1];
+    jwt = req.cookies.jwt;
   }
-  if (!token) {
+  if (!token || !jwt || jwt !== token) {
     throw new AppError("Your are not logged in", 401);
   }
+
+  // console.log({ jwt: req.cookies.jwt, token });
+
   const decode = await verifiedJWT(token);
   const user = await db.User.findOne({
     where: { id: decode.userId },
