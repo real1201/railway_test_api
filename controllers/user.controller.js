@@ -124,10 +124,8 @@ exports.isLoggedIn = async (req, res, next) => {
     jwt = req.cookies.jwt;
   }
   if (!token || !jwt || jwt !== token) {
-    throw new AppError("Your are not logged in", 401);
+    throw new AppError("Your not logged in", 401);
   }
-
-  // console.log({ jwt: req.cookies.jwt, token });
 
   const decode = await verifiedJWT(token);
   const user = await db.User.findOne({
@@ -140,6 +138,8 @@ exports.isLoggedIn = async (req, res, next) => {
   req.user = user;
   next();
 };
+
+//user loggedout
 exports.UserLoggedout = async (req, res, next) => {
   let token;
   if (
@@ -165,7 +165,10 @@ exports.UserLoggedout = async (req, res, next) => {
 exports.restrictedTo = (...roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {
-      throw new AppError("You dont have permission to perform this action.");
+      throw new AppError(
+        "You dont have permission to perform this action.",
+        402
+      );
     }
     next();
   };
