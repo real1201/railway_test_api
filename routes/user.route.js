@@ -12,5 +12,5 @@ router
 //Auth User
 router.route("/users/login").post(user.UserLogin);
 router.route("/users/signup").post(user.UserSignup);
-// router.route("/users/logout").post(user.loggedOutUser);
+router.route("/users/logout").post(user.UserLoggedout);
 module.exports = router;

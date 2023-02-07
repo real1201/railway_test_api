@@ -6,6 +6,7 @@ const {
   hashPass,
   sendTokenToCookie,
 } = require("../helpers/JWT_BCRYPT");
+const e = require("express");
 
 // Get User by Id
 exports.GetUserById = async (req, res, next) => {
@@ -122,7 +123,7 @@ exports.isLoggedIn = async (req, res, next) => {
     token = req.headers.authorization.split(" ")[1];
   }
   if (!token) {
-    throw new AppError("Your not logged in", 401);
+    throw new AppError("Your are not logged in", 401);
   }
   const decode = await verifiedJWT(token);
   const user = await db.User.findOne({
@@ -132,9 +133,29 @@ exports.isLoggedIn = async (req, res, next) => {
   if (!user) {
     throw new AppError("The token is not belong to this user.", 401);
   }
-
   req.user = user;
   next();
+};
+exports.UserLoggedout = async (req, res, next) => {
+  let token;
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer")
+  ) {
+    token = req.headers.authorization.startsWith(" ")[1];
+  }
+  if (token) {
+    token = "";
+    // throw new AppError("Your are already loggedout", 403);
+  }
+
+  res.clearCookie("jwt");
+  res.cookie("jwt", "loggout", {
+    maxAge: 0,
+    httpOnly: true,
+  });
+
+  res.status(200).json({ success: true, token, msg: "You are logged out." });
 };
 
 exports.restrictedTo = (...roles) => {

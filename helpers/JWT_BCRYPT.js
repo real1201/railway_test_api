@@ -23,8 +23,9 @@ exports.sendTokenToCookie = async (user, statuCode, res) => {
     httpOnly: true,
   };
 
+  user.password = undefined;
   if (process.env.NODE_ENV === "production") cookieOption.secure = true;
-  res.cookie("jwt_cookie", token, cookieOption);
+  res.cookie("jwt", token, cookieOption);
 
   res.status(statuCode).json({ success: true, token, user });
 };
