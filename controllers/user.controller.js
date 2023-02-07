@@ -1,7 +1,12 @@
 const db = require("../models");
 const NotFound = require("../helpers/not-found");
 const AppError = require("../helpers/AppError");
-const { signJWT, verifiedJWT, hashPass } = require("../helpers/JWT_BCRYPT");
+const {
+  signJWT,
+  verifiedJWT,
+  hashPass,
+  sendTokenToCookie,
+} = require("../helpers/JWT_BCRYPT");
 
 // Get User by Id
 exports.GetUserById = async (req, res, next) => {
@@ -98,9 +103,10 @@ exports.UserLogin = async (req, res, next) => {
   if (!user || !(await hashPass(password, user.password))) {
     errors["email_pass"] = "Incorrect email and password.";
   } else {
-    user.password = undefined;
-    const token = await signJWT(user.id);
-    return res.json({ success: true, token, data: user });
+    // user.password = undefined;
+    // const token = await signJWT(user.id);
+    // return res.status(201).json({ success: true, token, data: user });
+    sendTokenToCookie(user, 200, res);
   }
   if (errors) {
     return res.status(401).json({ success: false, errors });
