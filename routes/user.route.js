@@ -6,7 +6,7 @@ router.route("/users").get(user.isLoggedIn, user.GetAllUsers);
 router
   .route("/users/:id")
   .get(user.isLoggedIn, user.GetUserById)
-  .put(user.isLoggedIn, user.UpdateUser)
+  .put(user.isLoggedIn, user.restrictedTo("admin"), user.UpdateUser)
   .delete(user.isLoggedIn, user.restrictedTo("admin"), user.DeleteUser);
 
 //Auth User
